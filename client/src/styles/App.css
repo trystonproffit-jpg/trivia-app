@@ -154,3 +154,8 @@ label {
 .home-button:hover {
     background: rgba(124, 92, 255, 0.2);
 }
+
+.selected-answer {
+    opacity: 0.85;
+    font-style: italic;
+}

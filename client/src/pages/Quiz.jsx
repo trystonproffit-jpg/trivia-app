@@ -106,10 +106,10 @@ function Quiz() {
         setSelectedAnswer(answer);
 
         if (answer === currentQuestion.correct_answer) {
-            setAnswerResult("Correct!");
+            setAnswerResult("Correct! The wizard nods approvingly.");
             setScore(score + 1);
         } else {
-            setAnswerResult("Wrong!");
+            setAnswerResult(`Wrong! The wizard lashes out... The correct answer was ${currentQuestion.correct_answer}.`);
         }
     }
 
@@ -170,7 +170,9 @@ function Quiz() {
             </div>
 
                 {selectedAnswer && (
-                        <p>You selected: {selectedAnswer}</p>
+                        <p className="selected-answer">
+                            Your offering to the portal: {selectedAnswer}
+                        </p>
                     )}
 
                 {answerResult && (
@@ -179,7 +181,7 @@ function Quiz() {
 
                 {selectedAnswer && (
                     <button onClick={handleNextQuestion}>
-                        {isLastQuestion ? "See Results" : "Next Question"}
+                        {isLastQuestion ? "Reveal My Fate" : "Draw Next Scroll"}
                     </button>
                 )}
 

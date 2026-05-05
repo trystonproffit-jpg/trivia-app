@@ -6,14 +6,14 @@ function Home() {
     return (
         <div className="page">
             <div className="card">
-                <h1>Try Your Trivia!</h1>
+                <h1>Trials of Trivia!</h1>
 
                 <p>
-                    Let's find out if you're as smart as you think you are!
+                    Step inside, choose your trial, and test your wisdom against the enchanted scrolls!
                 </p>
                 
                 <button onClick={() => navigate("/setup")}>
-                    Commence
+                    Enter the Tavern
                 </button>
             </div>
         </div>

@@ -27,7 +27,7 @@ function Setup() {
 
                 <form onSubmit={handleSubmit}>
                     <label>
-                        Number of Questions:
+                        Number of Scrolls:
                         <input
                             type="number"
                             value={amount}
@@ -36,7 +36,7 @@ function Setup() {
                     </label>
                     
                     <label>
-                        Category:
+                        Realm of Knowledge:
                         <select
                             value={category}
                             onChange={(e) => setCategory(e.target.value)}
@@ -51,7 +51,7 @@ function Setup() {
                     </label>
                     
                     <label>
-                        Difficulty:
+                        Trial Intensity:
                         <select
                             value={difficulty}
                             onChange={(e) => setDifficulty(e.target.value)}
@@ -62,7 +62,7 @@ function Setup() {
                         </select>
                     </label>
 
-                    <button type="submit">Start er' up!</button>
+                    <button type="submit">Open the Portal</button>
 
                     <HomeButton />
                 </form>

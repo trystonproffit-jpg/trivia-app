@@ -16,27 +16,29 @@ function Results() {
         : 0;
 
     let title = "";
-
-    if(percentage === 100) {
-        title = "Universal Intellect!"
-    } else if (percentage >= 70) {
-        title = "Just a scratch"
-    } else if (percentage >= 40) {
-        title = "Shoo something stinks..."
-    } else {
-        title = "Total Failure";
-    }
-
     let message = "";
 
     if (percentage === 100) {
-        message = "Didn't miss one? Alright Bill Nye"
-    } else if (percentage >= 70) {
-        message = "Dang you were almost a gene-e-us"
+        title = "Legendary Sage!";
+        message = "The tavern falls silent. Even the dragon in the corner is impressed.";
+    } else if (percentage >= 90) {
+        title = "Dragon-Minded Scholar!";
+        message = "A near-perfect run. The wizard pretends not to be jealous.";
+    } else if (percentage >= 75) {
+        title = "Tavern Champion!";
+        message = "The bard is already writing a suspiciously inaccurate song about you.";
+    } else if (percentage >= 60) {
+        title = "Scroll Apprentice!";
+        message = "Respectable work. The scroll only mildly judged you.";
     } else if (percentage >= 40) {
-        message = "Yikes, Sally did better and she's 7"
+        title = "Goblin Negotiator!";
+        message = "Not amazing, not cursed. The goblins are willing to hear you out.";
+    } else if (percentage >= 20) {
+        title = "Confused Squire!";
+        message = "You fought bravely, mostly against the question's wording.";
     } else {
-        message = "Quick! Somebody! Help! Their brain... ITS MISSING"
+        title = "Cursed by the Quiz Gremlin!";
+        message = "The scroll was upside down. Probably.";
     }
 
     return (
