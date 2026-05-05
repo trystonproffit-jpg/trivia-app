@@ -111,7 +111,7 @@ https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple&e
 Clone the repository:
 
 ```bash
-git clone YOUR_REPO_URL
+git clone git@github.com:trystonproffit-jpg/trivia-app.git
 ```
 
 Move into the project:
