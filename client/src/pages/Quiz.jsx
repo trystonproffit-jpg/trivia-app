@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchTriviaQuestions } from "../services/api";
 
 function Quiz() {
     const location = useLocation();
+    const navigate = useNavigate();
 
     const quizSettings =location.state || {
         amount: 10,
@@ -39,12 +40,18 @@ function Quiz() {
         return <h2>{error}</h2>;
     }
 
+    if (questions.length === 0) {
+        return <h2>No questions found.</h2>
+    }
+
     const currentQuestion = questions[currentQuestionIndex];
 
     const answers = [
         currentQuestion.correct_answer,
         ...currentQuestion.incorrect_answers,
     ];
+
+    const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
     function handleAnswerClick(answer) {
         if (selectedAnswer) {
@@ -62,9 +69,18 @@ function Quiz() {
     }
 
     function handleNextQuestion() {
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-        setSelectedAnswer("");
-        setAnswerResult("");
+            if (isLastQuestion) {
+                navigate("/results", {
+                    state: {
+                        score,
+                        totalQuestions: questions.length,
+                    },
+                });
+            } else {
+                setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+                setSelectedAnswer("");
+                setAnswerResult("");
+            }
     }
 
     return (
@@ -100,7 +116,7 @@ function Quiz() {
 
             {selectedAnswer && (
                 <button onClick={handleNextQuestion}>
-                    Next Question
+                    {isLastQuestion ? "See Results" : "Next Question"}
                 </button>
             )}
 
