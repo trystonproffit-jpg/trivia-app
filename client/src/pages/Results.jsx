@@ -14,6 +14,18 @@ function Results() {
         ? Math.round((results.score / results.totalQuestions) * 100)
         : 0;
 
+    let title = "";
+
+    if(percentage === 100) {
+        title = "Universal Intellect!"
+    } else if (percentage >= 70) {
+        title = "Just a scratch"
+    } else if (percentage >= 40) {
+        title = "Shoo something stinks..."
+    } else {
+        title = "Total Failure";
+    }
+
     let message = "";
 
     if (percentage === 100) {
@@ -29,7 +41,7 @@ function Results() {
     return (
         <div className="page"> 
             <div className="card">
-                <h2>Results</h2>
+                <h2>{title}</h2>
 
                 <p>
                     Dang! {results.score} out of {results.totalQuestions}

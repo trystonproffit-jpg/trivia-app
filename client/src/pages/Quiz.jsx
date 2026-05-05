@@ -1,9 +1,36 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchTriviaQuestions } from "../services/api";
+import AnswerButton from "../components/AnswerButton";
+import Loading from "../components/Loading";
+import ErrorMessage from "../components/ErrorMessage";
+import QuestionCard from "../components/QuestionCard";
 
 function shuffleArray(array) {
     return [...array].sort(() => Math.random() - 0.5);
+}
+
+function getCategoryName(categoryId) {
+    const categories = {
+        "9": "General Knowledge",
+        "11": "Film",
+        "12": "Music",
+        "17": "Science",
+        "21": "Sports",
+        "23": "History",
+    };
+
+    return categories[categoryId] || "Trivia";
+}
+
+function getDifficultyName(difficulty) {
+    const difficultyNames = {
+        easy: "Light Work",
+        medium: "Average",
+        hard: "Extreme",
+    };
+
+    return difficultyNames[difficulty] || "Unknown Difficulty";
 }
 
 function Quiz() {
@@ -41,30 +68,34 @@ function Quiz() {
         if (questions.length > 0) {
             const currentQuestion = questions[currentQuestionIndex];
 
+            const answers = shuffleArray([
+                currentQuestion.correct_answer,
+                ...currentQuestion.incorrect_answers,
+            ]);
+            
             setShuffledAnswers(answers);
         }
     }, [questions, currentQuestionIndex]);
 
     if (loading) {
-        return <h2>Loading questions...</h2>
+        return <Loading />;
     }
 
     if (error) {
-        return <h2>{error}</h2>;
+        return <ErrorMessage message={error} />;
     }
 
     if (questions.length === 0) {
-        return <h2>No questions found.</h2>
+        return <ErrorMessage message="No inquiries located in the portal." />
     }
 
     const currentQuestion = questions[currentQuestionIndex];
 
-    const answers = shuffleArray([
-        currentQuestion.correct_answer,
-        ...currentQuestion.incorrect_answers,
-    ]);
-
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+    const categoryName = getCategoryName(quizSettings.category);
+
+    const difficultyName = getDifficultyName(quizSettings.difficulty);
 
     function handleAnswerClick(answer) {
         if (selectedAnswer) {
@@ -99,16 +130,19 @@ function Quiz() {
     return (
         <div className="page">
             <div className="card">
-                <h2>Quiz Page</h2>
+                <h2>Mysterious Question Portal</h2>
 
-                <p>Questions loaded: {questions.length}</p>
-                <p>Score: {score}</p>
-                
-                <p>
-                    Question {currentQuestionIndex + 1} of {questions.length}
+                <p className="quiz-meta">
+                    {categoryName} | {difficultyName}
                 </p>
 
-                <h3>{currentQuestion.question}</h3>
+                <p className="score-badge">Score: {score}</p>
+
+                <QuestionCard
+                    question={currentQuestion.question}
+                    currentQuestionIndex={currentQuestionIndex}
+                    totalQuestions={questions.length}
+                />
 
                 <div className="answer-list">
                     {shuffledAnswers.map((answer) => {
@@ -123,13 +157,13 @@ function Quiz() {
                         }
 
                         return (
-                            <button
+                            <AnswerButton
                                 key={answer}
+                                answer={answer}
+                                buttonText={buttonText}
                                 onClick={() => handleAnswerClick(answer)}
                                 disabled={selectedAnswer}
-                            >
-                                {buttonText}
-                            </button>
+                            />
                     );
                 })}
             </div>
