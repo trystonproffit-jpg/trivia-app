@@ -294,3 +294,24 @@ label {
             inset 0 0 18px rgba(214, 168, 79, 0.08);
     }
 }
+
+.result-score {
+    color: var(--text-muted);
+    font-weight: bold;
+}
+
+.result-percentage {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--gold-light);
+    margin: 12px 0;
+    text-shadow: 0 0 16px rgba(214, 168, 79, 0.35);
+}
+
+.result-message {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 520px;
+    margin: 0 auto 20px;
+}

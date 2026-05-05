@@ -46,13 +46,13 @@ function Results() {
             <div className="card">
                 <h2>{title}</h2>
 
-                <p>
+                <p className="result-score">
                     Dang! {results.score} out of {results.totalQuestions}
                 </p>
 
-                <p>{percentage}%</p>
+                <p className="result-percentage">{percentage}%</p>
 
-                <p>{message}</p>
+                <p className="result-message">{message}</p>
 
                 <button onClick={() => navigate("/setup")}>
                     Play Again
