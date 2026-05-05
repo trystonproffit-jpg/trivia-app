@@ -143,3 +143,14 @@ label {
     padding: 6px 14px;
     font-weight: bold;
 }
+
+.home-button {
+    background: transparent;
+    border: 1px solid #7c5cff;
+    color: #f4f4f4;
+    margin-bottom: 16px;
+}
+
+.home-button:hover {
+    background: rgba(124, 92, 255, 0.2);
+}

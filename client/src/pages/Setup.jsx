@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import HomeButton from "../components/HomeButton";
 
 function Setup() {
     const [amount, setAmount] = useState(10);
@@ -62,6 +63,8 @@ function Setup() {
                     </label>
 
                     <button type="submit">Start er' up!</button>
+
+                    <HomeButton />
                 </form>
             </div>
         </div>

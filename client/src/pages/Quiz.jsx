@@ -5,6 +5,7 @@ import AnswerButton from "../components/AnswerButton";
 import Loading from "../components/Loading";
 import ErrorMessage from "../components/ErrorMessage";
 import QuestionCard from "../components/QuestionCard";
+import HomeButton from "../components/HomeButton";
 
 function shuffleArray(array) {
     return [...array].sort(() => Math.random() - 0.5);
@@ -181,6 +182,8 @@ function Quiz() {
                         {isLastQuestion ? "See Results" : "Next Question"}
                     </button>
                 )}
+
+                <HomeButton />
 
             </div>
         </div>

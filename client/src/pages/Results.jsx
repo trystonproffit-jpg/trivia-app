@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import HomeButton from "../components/HomeButton";
 
 function Results() {
     const location = useLocation();
@@ -55,9 +56,7 @@ function Results() {
                     Play Again
                 </button>
 
-                <button onClick={() => navigate("/")}>
-                    Home
-                </button>
+                <HomeButton />
             </div>
         </div>
     );
