@@ -1,3 +1,23 @@
+:root {
+    --bg-dark: #10091a;
+    --bg-mid: #1c102b;
+    --card-dark: #25172f;
+    --card-warm: #2f2118;
+
+    --gold: #d6a84f;
+    --gold-light: #f0d28a;
+
+    --purple: #8b5cf6;
+    --purple-dark: #4d2f91;
+    --purple-glow: rgba(139, 92, 246, 0.45);
+
+    --text-light: #f8efd8;
+    --text-muted: #cbbf9d;
+
+    --danger: #c94f4f;
+    --success: #4fc985;
+}
+
 * {
     box-sizing: border-box;
 }
@@ -5,8 +25,11 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #151a24;
-    color: #f4f4f4;
+    background:
+        radial-gradient(circle at top, rgba(139, 92, 246, 0.35), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(214, 168, 79, 0.18), transparent 30%),
+        linear-gradient(135deg, var(--bg-dark), var(--bg-mid), #2b1d16);
+    color: var(--text-light);
 }
 
 button,
@@ -16,31 +39,53 @@ select {
 }
 
 button {
-    cursor:  pointer;
-    border: none;
-    border-radius: 8px;
-    padding: 10px 16px;
+    cursor: pointer;
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    padding: 11px 18px;
     margin: 6px;
-    background: #7c5cff;
-    color: white;
+    background:
+        linear-gradient(135deg, var(--purple), var(--purple-dark));
+    color: var(--text-light);
     font-weight: bold;
+    letter-spacing: 0.3px;
+    box-shadow:
+        0 0 12px rgba(139, 92, 246, 0.35),
+        inset 0 0 8px rgba(255, 255, 255, 0.08);
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
 }
 
 button:hover {
-    background: #6848e8;
+    transform: translateY(-2px);
+    box-shadow:
+        0 0 18px rgba(214, 168, 79, 0.35),
+        0 0 20px rgba(139, 92, 246, 0.45);
 }
 
 button:disabled {
     cursor: not-allowed;
-    opacity: 0.7;
+    opacity: 0.65;
+    transform: none;
 }
 
 input,
 select {
-    padding: 8px;
-    margin: 8px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+    padding: 10px 12px;
+    margin: 8px 0;
+    border-radius: 10px;
+    border: 1px solid var(--gold);
+    background: rgba(16, 9, 26, 0.75);
+    color: var(--text-light);
+    outline: none;
+}
+
+input:focus,
+select:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 10px rgba(214, 168, 79, 0.35);
 }
 
 form {
@@ -59,12 +104,18 @@ form {
 
 .card {
     width: 100%;
-    max-width: 650px;
-    background: #222938;
-    padding: 32px;
-    border-radius: 16px;
+    max-width: 700px;
+    background:
+        linear-gradient(145deg, rgba(37, 23, 47, 0.96), rgba(47, 33, 24, 0.96));
+    padding: 36px;
+    border-radius: 20px;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    border: 2px solid var(--gold);
+    box-shadow:
+    0 0 25px var(--purple-glow),
+    0 18px 45px rgba(0, 0, 0, 0.55),
+    inset 0 0 18px rgba(214, 168, 79, 0.08);
+animation: cardGlow 4s infinite;
 }
 
 .answer-list {
@@ -76,6 +127,37 @@ form {
 
 .answer-button {
     width: 100%;
+    background: rgba(16, 9, 26, 0.85);
+    border: 1px solid rgba(214, 168, 79, 0.65);
+    color: var(--text-light);
+    text-align: left;
+    padding: 14px 18px;
+    border-radius: 14px;
+}
+
+.correct-answer {
+    border-color: var(--success);
+    background: rgba(79, 201, 133, 0.18);
+    box-shadow:
+        0 0 14px rgba(79, 201, 133, 0.45),
+        inset 0 0 10px rgba(79, 201, 133, 0.12);
+}
+
+.wrong-answer {
+    border-color: var(--danger);
+    background: rgba(201, 79, 79, 0.18);
+    box-shadow:
+        0 0 14px rgba(201, 79, 79, 0.45),
+        inset 0 0 10px rgba(201, 79, 79, 0.12);
+}
+
+.answer-button:hover {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: var(--gold-light);
+}
+
+.answer-button:disabled {
+    opacity: 0.9;
 }
 
 .feedback {
@@ -83,18 +165,26 @@ form {
     font-weight: bold;
 }
 
+h1,
+h2,
+h3 {
+    font-family: Georgia, "Times New Roman", serif;
+    color: var(--gold-light);
+    text-shadow: 0 0 12px rgba(214, 168, 79, 0.25);
+}
+
 h1 {
-    font-size: 3rem;
+    font-size: 3.2rem;
     margin-bottom: 12px;
 }
 
 h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin-bottom: 16px;
 }
 
 h3 {
-    font-size: 1.3rem;
+    font-size: 1.35rem;
     line-height: 1.4;
     margin: 24px 0;
 }
@@ -113,8 +203,9 @@ label {
 
 .quiz-meta {
     display: inline-block;
-    background: rgba(124, 92, 255, 0.2);
-    border: 1px solid #7c5cff;
+    background: rgba(214, 168, 79, 0.12);
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
     border-radius: 999px;
     padding: 6px 14px;
     font-weight: bold;
@@ -131,14 +222,17 @@ label {
 
 .progress-fill {
     height: 100%;
-    background: #7c5cff;
-    transition: width 0.3s ease;
+    background: linear-gradient(90deg, var(--purple), var(--gold));
+    box-shadow: 0 0 12px var(--purple-glow);
+    transition: width 0.4s ease;
+    animation: magicalPulse 4s infinite;
 }
 
 .score-badge {
     display: inline-block;
-    background: #151a24;
-    border: 1px solid #7c5cff;
+    background: rgba(16, 9, 26, 0.85);
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
     border-radius: 999px;
     padding: 6px 14px;
     font-weight: bold;
@@ -146,16 +240,57 @@ label {
 
 .home-button {
     background: transparent;
-    border: 1px solid #7c5cff;
-    color: #f4f4f4;
-    margin-bottom: 16px;
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    box-shadow: none;
+    margin-bottom: 18px;
 }
 
 .home-button:hover {
-    background: rgba(124, 92, 255, 0.2);
+    background: rgba(214, 168, 79, 0.12);
+    box-shadow: 0 0 14px rgba(214, 168, 79, 0.25);
 }
 
 .selected-answer {
     opacity: 0.85;
     font-style: italic;
+}
+
+@keyframes magicalPulse {
+    0% {
+        box-shadow: 0 0 8px var(--purple-glow);
+    }
+
+    50% {
+        box-shadow:
+            0 0 16px var(--purple-glow),
+            0 0 22px rgba(214, 168, 79, 0.35);
+    }
+
+    100% {
+        box-shadow: 0 0 8px var(--purple-glow);
+    }
+}
+
+@keyframes cardGlow {
+    0% {
+        box-shadow:
+            0 0 20px rgba(139, 92, 246, 0.35),
+            0 18px 45px rgba(0, 0, 0, 0.55),
+            inset 0 0 18px rgba(214, 168, 79, 0.08);
+    }
+
+    50% {
+        box-shadow:
+            0 0 32px rgba(214, 168, 79, 0.28),
+            0 18px 45px rgba(0, 0, 0, 0.55),
+            inset 0 0 22px rgba(214, 168, 79, 0.12);
+    }
+
+    100% {
+        box-shadow:
+            0 0 20px rgba(139, 92, 246, 0.35),
+            0 18px 45px rgba(0, 0, 0, 0.55),
+            inset 0 0 18px rgba(214, 168, 79, 0.08);
+    }
 }

@@ -148,22 +148,25 @@ function Quiz() {
                 <div className="answer-list">
                     {shuffledAnswers.map((answer) => {
                         let buttonText = answer;
+                        let status = "";
 
                         if (selectedAnswer) {
                             if (answer === currentQuestion.correct_answer) {
                                 buttonText = `${answer} ✅`;
+                                status = "correct-answer";
                             } else if (answer === selectedAnswer) {
                                 buttonText = `${answer} ❌`;
+                                status = "wrong-answer"
                             }
                         }
 
                         return (
                             <AnswerButton
                                 key={answer}
-                                answer={answer}
                                 buttonText={buttonText}
                                 onClick={() => handleAnswerClick(answer)}
                                 disabled={selectedAnswer}
+                                status={status}
                             />
                     );
                 })}

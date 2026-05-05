@@ -1,7 +1,11 @@
-function AnswerButton({ answer, buttonText, onClick, disabled }) {
+function AnswerButton({ buttonText, onClick, disabled, status }) {
+    const buttonClass = status
+        ? `answer-button ${status}`
+        : "answer-button";
+    
     return (
         <button
-            className="answer-button"
+            className={buttonClass}
             onClick={onClick}
             disabled={disabled}
         >
