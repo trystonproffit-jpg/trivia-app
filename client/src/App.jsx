@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Setup from "./pages/Setup";
 import Quiz from "./pages/Quiz";
 import Results from "./pages/Results";
+import './styles/App.css'
 
 function App() {
   return (

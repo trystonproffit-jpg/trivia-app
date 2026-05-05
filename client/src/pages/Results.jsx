@@ -9,21 +9,44 @@ function Results() {
         totalQuestions: 0,
     };
 
-    const percentage = Math.round((results.score / results.totalQuestions) * 100);
+    const percentage = 
+        results.totalQuestions > 0
+        ? Math.round((results.score / results.totalQuestions) * 100)
+        : 0;
+
+    let message = "";
+
+    if (percentage === 100) {
+        message = "Didn't miss one? Alright Bill Nye"
+    } else if (percentage >= 70) {
+        message = "Dang you were almost a gene-e-us"
+    } else if (percentage >= 40) {
+        message = "Yikes, Sally did better and she's 7"
+    } else {
+        message = "Quick! Somebody! Help! Their brain... ITS MISSING"
+    }
 
     return (
-        <div>
-            <h2>Results</h2>
+        <div className="page"> 
+            <div className="card">
+                <h2>Results</h2>
 
-            <p>
-                Dang! {results.score} out of {results.totalQuestions}
-            </p>
+                <p>
+                    Dang! {results.score} out of {results.totalQuestions}
+                </p>
 
-            <p>{percentage}%</p>
+                <p>{percentage}%</p>
 
-            <button onClick={() => navigate("/setup")}>
-                Play Again
-            </button>
+                <p>{message}</p>
+
+                <button onClick={() => navigate("/setup")}>
+                    Play Again
+                </button>
+
+                <button onClick={() => navigate("/")}>
+                    Home
+                </button>
+            </div>
         </div>
     );
 }

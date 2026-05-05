@@ -4,12 +4,18 @@ function Home() {
     const navigate = useNavigate();
 
     return (
-        <div>
-            <h1>Try Your Trivia!</h1>
-            <p>Test your knowledge with fun trivia questions!</p>
-            <button onClick={() => navigate("/setup")}>
-                Begin
-            </button>
+        <div className="page">
+            <div className="card">
+                <h1>Try Your Trivia!</h1>
+
+                <p>
+                    Let's find out if you're as smart as you think you are!
+                </p>
+                
+                <button onClick={() => navigate("/setup")}>
+                    Commence
+                </button>
+            </div>
         </div>
     );
 }

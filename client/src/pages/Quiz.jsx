@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { fetchTriviaQuestions } from "../services/api";
 
+function shuffleArray(array) {
+    return [...array].sort(() => Math.random() - 0.5);
+}
+
 function Quiz() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -19,6 +23,7 @@ function Quiz() {
     const [answerResult, setAnswerResult] = useState("");
     const [score, setScore] = useState(0);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [shuffledAnswers, setShuffledAnswers] = useState([]);
 
     useEffect(() => {
         fetchTriviaQuestions(quizSettings)
@@ -31,6 +36,14 @@ function Quiz() {
                 setLoading(false);
             });
     }, []);
+
+    useEffect(() => {
+        if (questions.length > 0) {
+            const currentQuestion = questions[currentQuestionIndex];
+
+            setShuffledAnswers(answers);
+        }
+    }, [questions, currentQuestionIndex]);
 
     if (loading) {
         return <h2>Loading questions...</h2>
@@ -46,10 +59,10 @@ function Quiz() {
 
     const currentQuestion = questions[currentQuestionIndex];
 
-    const answers = [
+    const answers = shuffleArray([
         currentQuestion.correct_answer,
         ...currentQuestion.incorrect_answers,
-    ];
+    ]);
 
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
@@ -84,42 +97,58 @@ function Quiz() {
     }
 
     return (
-        <div>
-            <h2>Quiz Page</h2>
+        <div className="page">
+            <div className="card">
+                <h2>Quiz Page</h2>
 
-            <p>Questions loaded: {questions.length}</p>
-            <p>Score: {score}</p>
-            
-            <p>
-                Question {currentQuestionIndex + 1} of {questions.length}
-            </p>
+                <p>Questions loaded: {questions.length}</p>
+                <p>Score: {score}</p>
+                
+                <p>
+                    Question {currentQuestionIndex + 1} of {questions.length}
+                </p>
 
-            <h3>{currentQuestion.question}</h3>
+                <h3>{currentQuestion.question}</h3>
 
-            {answers.map((answer) => (
-                <button 
-                    key={answer}
-                    onClick={() => handleAnswerClick(answer)}
-                    disabled={selectedAnswer}
-                >
-                    {answer}
-                </button>
-            ))}
+                <div className="answer-list">
+                    {shuffledAnswers.map((answer) => {
+                        let buttonText = answer;
 
-            {selectedAnswer && (
-                    <p>You selected: {selectedAnswer}</p>
+                        if (selectedAnswer) {
+                            if (answer === currentQuestion.correct_answer) {
+                                buttonText = `${answer} ✅`;
+                            } else if (answer === selectedAnswer) {
+                                buttonText = `${answer} ❌`;
+                            }
+                        }
+
+                        return (
+                            <button
+                                key={answer}
+                                onClick={() => handleAnswerClick(answer)}
+                                disabled={selectedAnswer}
+                            >
+                                {buttonText}
+                            </button>
+                    );
+                })}
+            </div>
+
+                {selectedAnswer && (
+                        <p>You selected: {selectedAnswer}</p>
+                    )}
+
+                {answerResult && (
+                    <p className="feedback">{answerResult}</p>
                 )}
 
-            {answerResult && (
-                <p>{answerResult}</p>
-            )}
+                {selectedAnswer && (
+                    <button onClick={handleNextQuestion}>
+                        {isLastQuestion ? "See Results" : "Next Question"}
+                    </button>
+                )}
 
-            {selectedAnswer && (
-                <button onClick={handleNextQuestion}>
-                    {isLastQuestion ? "See Results" : "Next Question"}
-                </button>
-            )}
-
+            </div>
         </div>
     );
 }
