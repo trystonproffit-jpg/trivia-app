@@ -6,11 +6,21 @@ function Setup() {
     const [amount, setAmount] = useState(10);
     const [category, setCategory] = useState("9");
     const [difficulty, setDifficulty] = useState("easy");
+    const [error, setError] = useState("");
 
     const navigate = useNavigate();
 
     function handleSubmit(e) {
         e.preventDefault();
+
+        const questionAmount = Number(amount);
+
+        if (questionAmount < 1 || questionAmount > 20) {
+            setError ("Choose between 1 and 20 scrolls, brave traveler.")
+            return;
+        }
+
+        setError("");
             
         navigate("/quiz", {
             state: {
@@ -18,12 +28,16 @@ function Setup() {
                 category,
                 difficulty,
             },
-        })
+        });
     }
     return (
         <div className="page">
             <div className="card">
                 <h2>Pick Your Poison</h2>
+
+                {error && (
+                    <p className="feedback">{error}</p>
+                )}
 
                 <form onSubmit={handleSubmit}>
                     <label>
