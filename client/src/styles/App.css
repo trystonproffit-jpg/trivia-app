@@ -205,12 +205,29 @@ form {
 
 /* Page-specific scroll sizing */
 
-.home-card {
-    min-height: 720px;
-    padding: 225px 76px 150px;
+.card.scroll-card.home-card {
+    min-height: 700px;
+    padding: 205px 92px 145px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     animation:
         scrollUnroll 0.85s ease-out both,
         parchmentGlow 5s ease-in-out infinite 0.85s;
+}
+
+.home-card h1 {
+    margin-bottom: 14px;
+}
+
+.home-card p {
+    max-width: 360px;
+    margin: 0 auto 20px;
+    line-height: 1.35;
+}
+
+.home-card button {
+    align-self: center;
 }
 
 .setup-card {
@@ -399,6 +416,7 @@ form {
 }
 
 /* More specific than .scroll-card button, so answer choices do not inherit main purple button styling */
+
 .scroll-card .answer-button {
     width: 100%;
     color: #f8efd8;
@@ -431,6 +449,7 @@ form {
 }
 
 /* Correct answer overrides both .scroll-card button and .scroll-card .answer-button */
+
 .scroll-card .answer-button.correct-answer {
     border-color: var(--success);
     background: rgba(79, 201, 133, 0.28);
@@ -441,6 +460,7 @@ form {
 }
 
 /* Wrong answer overrides both .scroll-card button and .scroll-card .answer-button */
+
 .scroll-card .answer-button.wrong-answer {
     border-color: var(--danger);
     background: rgba(201, 79, 79, 0.3);
@@ -781,9 +801,9 @@ form {
         background-size: 124% 112%;
     }
 
-    .home-card {
-        min-height: 690px;
-        padding: 215px 64px 140px;
+    .card.scroll-card.home-card {
+        min-height: 700px;
+        padding: 205px 92px 145px;
     }
 
     .setup-card {
@@ -820,7 +840,7 @@ form {
         background-size: 132% 114%;
     }
 
-    .home-card {
+    .card.scroll-card.home-card {
         min-height: 635px;
         padding: 188px 36px 132px;
     }
