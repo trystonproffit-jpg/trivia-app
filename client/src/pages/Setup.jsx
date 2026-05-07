@@ -18,7 +18,7 @@ function Setup() {
         const questionAmount = Number(amount);
 
         if (questionAmount < 1 || questionAmount > 20) {
-            setError ("Choose between 1 and 20 scrolls, brave traveler.")
+            setError("Choose between 1 and 20 scrolls, brave traveler.");
             return;
         }
 
@@ -34,9 +34,10 @@ function Setup() {
             },
         });
     }
+
     return (
         <div className="page">
-            <div className="card">
+            <div className="card scroll-card setup-card">
                 <h2>Pick Your Poison</h2>
 
                 {error && (
@@ -111,7 +112,7 @@ function Setup() {
                 </form>
             </div>
         </div>
-    )
+    );
 }
 
 export default Setup;

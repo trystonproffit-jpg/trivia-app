@@ -91,7 +91,7 @@ function Results() {
     return (
         <div className="page">
             <motion.div
-                className="card"
+                className="card scroll-card results-card"
                 variants={cardVariants}
                 initial="hidden"
                 animate="visible"

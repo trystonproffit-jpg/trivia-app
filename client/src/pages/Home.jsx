@@ -5,7 +5,7 @@ function Home() {
 
     return (
         <div className="page">
-            <div className="card">
+            <div className="card scroll-card home-card">
                 <h1>Trials of Trivia!</h1>
 
                 <p>

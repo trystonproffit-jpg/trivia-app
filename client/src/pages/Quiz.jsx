@@ -180,7 +180,7 @@ function Quiz() {
 
     return (
         <div className="page">
-            <div className="card">
+            <div className="card scroll-card quiz-card">
                 <h2>Mysterious Question Portal</h2>
 
                 <p className="quiz-meta">
