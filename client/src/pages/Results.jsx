@@ -3,6 +3,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import HomeButton from "../components/HomeButton";
 
+const resultSparkles = [
+    { left: "8%", top: "22%", delay: 0 },
+    { left: "18%", top: "68%", delay: 0.35 },
+    { left: "82%", top: "18%", delay: 0.15 },
+    { left: "92%", top: "62%", delay: 0.5 },
+    { left: "50%", top: "2%", delay: 0.25 },
+    { left: "48%", top: "88%", delay: 0.65 },
+];
+
 function Results() {
     const location = useLocation();
     const navigate = useNavigate();
@@ -104,9 +113,48 @@ function Results() {
                     Dang! {results.score} out of {results.totalQuestions}
                 </motion.p>
 
-                <motion.p className="result-percentage" variants={itemVariants}>
-                    <motion.span>{rounded}</motion.span>%
-                </motion.p>
+                <motion.div
+                    className="result-percentage-wrap"
+                    variants={itemVariants}
+                >
+                    <motion.p
+                        className="result-percentage"
+                        animate={{
+                            scale: [1, 1.06, 1],
+                        }}
+                        transition={{
+                            duration: 2.4,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                        }}
+                    >
+                        <motion.span>{rounded}</motion.span>%
+                    </motion.p>
+
+                    <div className="result-sparkle-layer">
+                        {resultSparkles.map((sparkle, index) => (
+                            <motion.span
+                                key={index}
+                                className="result-sparkle"
+                                style={{
+                                    left: sparkle.left,
+                                    top: sparkle.top,
+                                }}
+                                animate={{
+                                    y: [0, -16, 0],
+                                    scale: [0.65, 1.15, 0.65],
+                                    opacity: [0.25, 1, 0.25],
+                                }}
+                                transition={{
+                                    duration: 1.8,
+                                    delay: sparkle.delay,
+                                    repeat: Infinity,
+                                    ease: "easeInOut",
+                                }}
+                            />
+                        ))}
+                    </div>
+                </motion.div>
 
                 <motion.p className="result-message" variants={itemVariants}>
                     {message}
