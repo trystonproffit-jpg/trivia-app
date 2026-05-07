@@ -8,10 +8,12 @@ import QuestionCard from "../components/QuestionCard";
 import HomeButton from "../components/HomeButton";
 import TimerBar from "../components/TimerBar";
 
+// Creates a shuffled copy of an array so the correct answer is not always first
 function shuffleArray(array) {
     return [...array].sort(() => Math.random() - 0.5);
 }
 
+// Converts Open Trivia DB category IDs into readable category names
 function getCategoryName(categoryId) {
     const categories = {
         "9": "General Knowledge",
@@ -25,6 +27,7 @@ function getCategoryName(categoryId) {
     return categories[categoryId] || "Trivia";
 }
 
+// Converts API difficulty values into the custom app difficulty labels
 function getDifficultyName(difficulty) {
     const difficultyNames = {
         easy: "Light Work",
@@ -39,7 +42,9 @@ function Quiz() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const quizSettings =location.state || {
+    // Quiz settings come from the setup page.
+    // Defaults are used if someone visits /quiz directly.
+    const quizSettings = location.state || {
         amount: 10,
         category: "9",
         difficulty: "easy",
@@ -50,16 +55,23 @@ function Quiz() {
     const timerEnabled = quizSettings.timerEnabled;
     const timerLength = quizSettings.timerLength;
 
+    // Main quiz state
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
+    // Current question / answer state
     const [selectedAnswer, setSelectedAnswer] = useState("");
     const [answerResult, setAnswerResult] = useState("");
+    const [timeRanOut, setTimeRanOut] = useState(false);
     const [score, setScore] = useState(0);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [shuffledAnswers, setShuffledAnswers] = useState([]);
+
+    // Timer state
     const [timeLeft, setTimeLeft] = useState(timerLength);
 
+    // Fetch trivia questions when the quiz page first loads
     useEffect(() => {
         fetchTriviaQuestions(quizSettings)
             .then((data) => {
@@ -72,6 +84,7 @@ function Quiz() {
             });
     }, []);
 
+    // Shuffle the answer choices whenever a new question loads
     useEffect(() => {
         if (questions.length > 0) {
             const currentQuestion = questions[currentQuestionIndex];
@@ -85,13 +98,17 @@ function Quiz() {
         }
     }, [questions, currentQuestionIndex]);
 
+    // Countdown timer logic
+    // Stops if timer is disabled, the user answered, or the page is loading/erroring.
     useEffect(() => {
         if (!timerEnabled || selectedAnswer || loading || error) {
             return;
         }
 
+        // When time runs out, lock the question and show timeout feedback
         if (timeLeft <= 0) {
             setSelectedAnswer("Time ran out");
+            setTimeRanOut(true);
             setAnswerResult("Time's up! The hourglass goblin has judged you.");
             return;
         }
@@ -100,9 +117,11 @@ function Quiz() {
             setTimeLeft((prevTime) => prevTime - 1);
         }, 1000);
 
+        // Cleanup prevents multiple timers from stacking up
         return () => clearTimeout(timer);
     }, [timeLeft, timerEnabled, selectedAnswer, loading, error]);
 
+    // Render loading, error, or empty states before trying to display quiz data
     if (loading) {
         return <Loading />;
     }
@@ -112,18 +131,18 @@ function Quiz() {
     }
 
     if (questions.length === 0) {
-        return <ErrorMessage message="No inquiries located in the portal." />
+        return <ErrorMessage message="No inquiries located in the portal." />;
     }
 
+    // Derived values for the current quiz screen
     const currentQuestion = questions[currentQuestionIndex];
-
     const isLastQuestion = currentQuestionIndex === questions.length - 1;
-
     const categoryName = getCategoryName(quizSettings.category);
-
     const difficultyName = getDifficultyName(quizSettings.difficulty);
 
+    // Handles answer selection, score updates, and feedback text
     function handleAnswerClick(answer) {
+        // Prevents users from answering the same question more than once
         if (selectedAnswer) {
             return;
         }
@@ -134,24 +153,28 @@ function Quiz() {
             setAnswerResult("Correct! The wizard nods approvingly.");
             setScore(score + 1);
         } else {
-            setAnswerResult(`Wrong! The wizard lashes out... The correct answer was ${currentQuestion.correct_answer}.`);
+            setAnswerResult(
+                `Wrong! The wizard lashes out... The correct answer was ${currentQuestion.correct_answer}.`
+            );
         }
     }
 
+    // Moves to the next question or sends the user to the results page
     function handleNextQuestion() {
-            if (isLastQuestion) {
-                navigate("/results", {
-                    state: {
-                        score,
-                        totalQuestions: questions.length,
-                    },
-                });
-            } else {
-                setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
-                setSelectedAnswer("");
-                setAnswerResult("");
-                setTimeLeft(timerLength);
-            }
+        if (isLastQuestion) {
+            navigate("/results", {
+                state: {
+                    score,
+                    totalQuestions: questions.length,
+                },
+            });
+        } else {
+            setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
+            setSelectedAnswer("");
+            setAnswerResult("");
+            setTimeRanOut(false);
+            setTimeLeft(timerLength);
+        }
     }
 
     return (
@@ -183,13 +206,14 @@ function Quiz() {
                         let buttonText = answer;
                         let status = "";
 
+                        // After an answer is chosen, visually mark correct/wrong answers
                         if (selectedAnswer) {
                             if (answer === currentQuestion.correct_answer) {
                                 buttonText = `${answer} ✅`;
                                 status = "correct-answer";
-                            } else if (answer === selectedAnswer) {
+                            } else if (answer === selectedAnswer && !timeRanOut) {
                                 buttonText = `${answer} ❌`;
-                                status = "wrong-answer"
+                                status = "wrong-answer";
                             }
                         }
 
@@ -201,15 +225,15 @@ function Quiz() {
                                 disabled={selectedAnswer}
                                 status={status}
                             />
-                    );
-                })}
-            </div>
+                        );
+                    })}
+                </div>
 
                 {selectedAnswer && (
-                        <p className="selected-answer">
-                            Your offering to the portal: {selectedAnswer}
-                        </p>
-                    )}
+                    <p className="selected-answer">
+                        Your offering to the portal: {selectedAnswer}
+                    </p>
+                )}
 
                 {answerResult && (
                     <p className="feedback">{answerResult}</p>
@@ -222,7 +246,6 @@ function Quiz() {
                 )}
 
                 <HomeButton />
-
             </div>
         </div>
     );
