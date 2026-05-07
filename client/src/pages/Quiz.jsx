@@ -7,6 +7,7 @@ import ErrorMessage from "../components/ErrorMessage";
 import QuestionCard from "../components/QuestionCard";
 import HomeButton from "../components/HomeButton";
 import TimerBar from "../components/TimerBar";
+import { motion } from "framer-motion";
 
 // Creates a shuffled copy of an array so the correct answer is not always first
 function shuffleArray(array) {
@@ -192,6 +193,8 @@ function Quiz() {
                     <TimerBar
                         timeLeft={timeLeft}
                         timerLength={timerLength}
+                        isRunning={timerEnabled && !selectedAnswer}
+                        timerKey={currentQuestionIndex}
                     />
                 )}
 
@@ -201,7 +204,19 @@ function Quiz() {
                     totalQuestions={questions.length}
                 />
 
-                <div className="answer-list">
+                <motion.div
+                    className="answer-list"
+                    key={currentQuestionIndex}
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                        visible: {
+                            transition: {
+                                staggerChildren: 0.18,
+                            },
+                        },
+                    }}
+                >
                     {shuffledAnswers.map((answer) => {
                         let buttonText = answer;
                         let status = "";
@@ -227,7 +242,7 @@ function Quiz() {
                             />
                         );
                     })}
-                </div>
+                </motion.div>
 
                 {selectedAnswer && (
                     <p className="selected-answer">

@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import HomeButton from "../components/HomeButton";
 
 function Results() {
@@ -10,10 +12,22 @@ function Results() {
         totalQuestions: 0,
     };
 
-    const percentage = 
+    const percentage =
         results.totalQuestions > 0
-        ? Math.round((results.score / results.totalQuestions) * 100)
-        : 0;
+            ? Math.round((results.score / results.totalQuestions) * 100)
+            : 0;
+
+    const count = useMotionValue(0);
+    const rounded = useTransform(count, (latest) => Math.round(latest));
+
+    useEffect(() => {
+        const controls = animate(count, percentage, {
+            duration: 1.2,
+            ease: "easeOut",
+        });
+
+        return () => controls.stop();
+    }, [percentage]);
 
     let title = "";
     let message = "";
@@ -41,25 +55,73 @@ function Results() {
         message = "The scroll was upside down. Probably.";
     }
 
+    const cardVariants = {
+        hidden: {
+            opacity: 0,
+            scale: 0.9,
+            y: 30,
+        },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            transition: {
+                duration: 0.7,
+                ease: [0.22, 1, 0.36, 1],
+                staggerChildren: 0.2,
+            },
+        },
+    };
+
+    const itemVariants = {
+        hidden: {
+            opacity: 0,
+            y: 20,
+        },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: {
+                duration: 0.5,
+                ease: "easeOut",
+            },
+        },
+    };
+
     return (
-        <div className="page"> 
-            <div className="card">
-                <h2>{title}</h2>
+        <div className="page">
+            <motion.div
+                className="card"
+                variants={cardVariants}
+                initial="hidden"
+                animate="visible"
+            >
+                <motion.h2 variants={itemVariants}>
+                    {title}
+                </motion.h2>
 
-                <p className="result-score">
+                <motion.p className="result-score" variants={itemVariants}>
                     Dang! {results.score} out of {results.totalQuestions}
-                </p>
+                </motion.p>
 
-                <p className="result-percentage">{percentage}%</p>
+                <motion.p className="result-percentage" variants={itemVariants}>
+                    <motion.span>{rounded}</motion.span>%
+                </motion.p>
 
-                <p className="result-message">{message}</p>
+                <motion.p className="result-message" variants={itemVariants}>
+                    {message}
+                </motion.p>
 
-                <button onClick={() => navigate("/setup")}>
-                    Play Again
-                </button>
+                <motion.div variants={itemVariants}>
+                    <button onClick={() => navigate("/setup")}>
+                        Play Again
+                    </button>
+                </motion.div>
 
-                <HomeButton />
-            </div>
+                <motion.div variants={itemVariants}>
+                    <HomeButton />
+                </motion.div>
+            </motion.div>
         </div>
     );
 }

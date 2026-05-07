@@ -1,5 +1,28 @@
-function TimerBar({ timeLeft, timerLength }) {
-    const timerPercentage = (timeLeft / timerLength) * 100;
+import { useEffect } from "react";
+import { motion, useAnimationControls } from "framer-motion";
+
+function TimerBar({ timeLeft, timerLength, isRunning, timerKey }) {
+    const controls = useAnimationControls();
+
+    useEffect(() => {
+        controls.set({ scaleX: 1 });
+
+        if (isRunning) {
+            controls.start({
+                scaleX: 0,
+                transition: {
+                    duration: timerLength,
+                    ease: "linear",
+                },
+            });
+        }
+    }, [timerKey, timerLength]);
+
+    useEffect(() => {
+        if (!isRunning) {
+            controls.stop();
+        }
+    }, [isRunning]);
 
     return (
         <div className="timer-section">
@@ -8,10 +31,10 @@ function TimerBar({ timeLeft, timerLength }) {
             </p>
 
             <div className="timer-bar">
-                <div
+                <motion.div
                     className="timer-fill"
-                    style={{ width: `${timerPercentage}%` }}
-                ></div>
+                    animate={controls}
+                ></motion.div>
             </div>
         </div>
     );
