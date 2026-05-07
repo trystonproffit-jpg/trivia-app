@@ -6,6 +6,7 @@ import Loading from "../components/Loading";
 import ErrorMessage from "../components/ErrorMessage";
 import QuestionCard from "../components/QuestionCard";
 import HomeButton from "../components/HomeButton";
+import TimerBar from "../components/TimerBar";
 
 function shuffleArray(array) {
     return [...array].sort(() => Math.random() - 0.5);
@@ -42,7 +43,12 @@ function Quiz() {
         amount: 10,
         category: "9",
         difficulty: "easy",
+        timerEnabled: false,
+        timerLength: 20,
     };
+
+    const timerEnabled = quizSettings.timerEnabled;
+    const timerLength = quizSettings.timerLength;
 
     const [questions, setQuestions] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -52,6 +58,7 @@ function Quiz() {
     const [score, setScore] = useState(0);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [shuffledAnswers, setShuffledAnswers] = useState([]);
+    const [timeLeft, setTimeLeft] = useState(timerLength);
 
     useEffect(() => {
         fetchTriviaQuestions(quizSettings)
@@ -77,6 +84,24 @@ function Quiz() {
             setShuffledAnswers(answers);
         }
     }, [questions, currentQuestionIndex]);
+
+    useEffect(() => {
+        if (!timerEnabled || selectedAnswer || loading || error) {
+            return;
+        }
+
+        if (timeLeft <= 0) {
+            setSelectedAnswer("Time ran out");
+            setAnswerResult("Time's up! The hourglass goblin has judged you.");
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setTimeLeft((prevTime) => prevTime - 1);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [timeLeft, timerEnabled, selectedAnswer, loading, error]);
 
     if (loading) {
         return <Loading />;
@@ -125,6 +150,7 @@ function Quiz() {
                 setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
                 setSelectedAnswer("");
                 setAnswerResult("");
+                setTimeLeft(timerLength);
             }
     }
 
@@ -138,6 +164,13 @@ function Quiz() {
                 </p>
 
                 <p className="score-badge">Score: {score}</p>
+                
+                {timerEnabled && (
+                    <TimerBar
+                        timeLeft={timeLeft}
+                        timerLength={timerLength}
+                    />
+                )}
 
                 <QuestionCard
                     question={currentQuestion.question}

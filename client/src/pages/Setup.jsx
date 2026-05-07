@@ -7,6 +7,8 @@ function Setup() {
     const [category, setCategory] = useState("9");
     const [difficulty, setDifficulty] = useState("easy");
     const [error, setError] = useState("");
+    const [timerEnabled, setTimerEnabled] = useState(false);
+    const [timerLength, setTimerLength] = useState(20);
 
     const navigate = useNavigate();
 
@@ -24,9 +26,11 @@ function Setup() {
             
         navigate("/quiz", {
             state: {
-                amount,
+                amount: questionAmount,
                 category,
                 difficulty,
+                timerEnabled,
+                timerLength,
             },
         });
     }
@@ -75,6 +79,31 @@ function Setup() {
                             <option value="hard">Extreme</option>
                         </select>
                     </label>
+
+                    <label>
+                        Timer Curse:
+                        <select
+                            value={timerEnabled ? "on" : "off"}
+                            onChange={(e) => setTimerEnabled(e.target.value === "on")}
+                        >
+                            <option value="off">No Curse</option>
+                            <option value="on">Timed Trial</option>
+                        </select>
+                    </label>
+
+                    {timerEnabled && (
+                        <label>
+                            Curse Duration:
+                            <select
+                                value={timerLength}
+                                onChange={(e) => setTimerLength(Number(e.target.value))}
+                            >
+                                <option value={30}>Chill Trial — 30 seconds</option>
+                                <option value={20}>Standard Trial — 20 seconds</option>
+                                <option value={10}>Panic Trial — 10 seconds</option>
+                            </select>
+                        </label>
+                    )}
 
                     <button type="submit">Open the Portal</button>
 
