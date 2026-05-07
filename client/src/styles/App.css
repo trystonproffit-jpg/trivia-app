@@ -11,6 +11,12 @@
     --purple-dark: #4d2f91;
     --purple-glow: rgba(139, 92, 246, 0.45);
 
+    --parchment: #f3d28f;
+    --parchment-light: #ffe7ad;
+    --parchment-dark: #8f5f28;
+    --ink: #3b2412;
+    --ink-muted: #65401f;
+
     --text-light: #f8efd8;
     --text-muted: #cbbf9d;
 
@@ -45,7 +51,7 @@ button {
     border: 1px solid var(--gold);
     border-radius: 999px;
     padding: 11px 18px;
-    margin: 6px;
+    margin: 4px;
     background:
         linear-gradient(135deg, var(--purple), var(--purple-dark));
     color: var(--text-light);
@@ -100,8 +106,8 @@ form {
     min-height: 100vh;
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 24px;
+    align-items: flex-start;
+    padding: 18px 24px 44px;
     position: relative;
     z-index: 2;
 }
@@ -111,13 +117,13 @@ form {
     position: absolute;
     width: min(760px, 88vw);
     height: 150px;
-    bottom: 16%;
+    bottom: 12%;
     left: 50%;
     transform: translateX(-50%);
     background: radial-gradient(
         ellipse,
-        rgba(139, 92, 246, 0.34),
-        rgba(214, 168, 79, 0.14),
+        rgba(139, 92, 246, 0.28),
+        rgba(214, 168, 79, 0.12),
         transparent 72%
     );
     filter: blur(22px);
@@ -125,11 +131,14 @@ form {
     pointer-events: none;
 }
 
+/* Default card fallback for loading/error states.
+   The scroll-card rules below completely override this visual style. */
+
 .card {
     width: 100%;
     max-width: 700px;
     background:
-        linear-gradient(145deg, rgba(37, 23, 47, 0.8), rgba(47, 33, 24, 0.82));
+        linear-gradient(145deg, rgba(37, 23, 47, 0.84), rgba(47, 33, 24, 0.84));
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
     padding: 36px;
@@ -144,140 +153,227 @@ form {
     animation: cardGlow 4s infinite;
 }
 
-.answer-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 24px 0;
-}
+/* Magical parchment scroll cards.
+   This removes the normal rectangular card look.
+   The scroll image itself becomes the card. */
 
-.answer-list > div {
-    width: 100%;
-}
+.card.scroll-card {
+    position: relative;
+    width: min(620px, 94vw);
+    max-width: 620px;
+    min-height: 820px;
+    padding: 170px 70px 135px;
+    color: var(--ink);
+    text-align: center;
 
-.answer-button {
-    width: 100%;
-    background: rgba(16, 9, 26, 0.85);
-    border: 1px solid rgba(214, 168, 79, 0.65);
-    color: var(--text-light);
-    text-align: left;
-    padding: 14px 18px;
-    border-radius: 14px;
-}
+    background-color: transparent;
+    background-image: url("../assets/magic-scroll.png");
+    background-repeat: no-repeat;
+    background-position: center center;
 
-.answer-button:hover {
-    background: rgba(139, 92, 246, 0.25);
-    border-color: var(--gold-light);
-}
+    /* Bigger than 100% to crop out transparent canvas padding in the PNG */
+    background-size: 122% 112%;
 
-.answer-button:disabled {
-    opacity: 0.9;
-}
-
-.correct-answer {
-    border-color: var(--success);
-    background: rgba(79, 201, 133, 0.18);
-    box-shadow:
-        0 0 14px rgba(79, 201, 133, 0.45),
-        inset 0 0 10px rgba(79, 201, 133, 0.12);
-}
-
-.wrong-answer {
-    border-color: var(--danger);
-    background: rgba(201, 79, 79, 0.18);
-    box-shadow:
-        0 0 14px rgba(201, 79, 79, 0.45),
-        inset 0 0 10px rgba(201, 79, 79, 0.12);
-}
-
-.feedback {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-h1,
-h2,
-h3 {
-    font-family: Georgia, "Times New Roman", serif;
-    color: var(--gold-light);
-    text-shadow:
-        0 0 10px rgba(214, 168, 79, 0.34),
-        0 0 22px rgba(139, 92, 246, 0.24);
-}
-
-h1 {
-    font-size: 3.2rem;
-    margin-bottom: 12px;
-}
-
-h2 {
-    font-size: 2.2rem;
-    margin-bottom: 16px;
-}
-
-h3 {
-    font-size: 1.35rem;
-    line-height: 1.4;
-    margin: 24px 0;
-}
-
-p {
-    line-height: 1.5;
-}
-
-label {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    font-weight: bold;
-    text-align: left;
-}
-
-.quiz-meta {
-    display: inline-block;
-    background: rgba(214, 168, 79, 0.12);
-    border: 1px solid var(--gold);
-    color: var(--gold-light);
-    border-radius: 999px;
-    padding: 6px 14px;
-    font-weight: bold;
-}
-
-.score-badge {
-    display: inline-block;
-    background: rgba(16, 9, 26, 0.85);
-    border: 1px solid var(--gold);
-    color: var(--gold-light);
-    border-radius: 999px;
-    padding: 6px 14px;
-    font-weight: bold;
-}
-
-.home-button {
-    background: transparent;
-    border: 1px solid var(--gold);
-    color: var(--gold-light);
+    border: none;
+    border-radius: 0;
     box-shadow: none;
-    margin-bottom: 18px;
+
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    overflow: visible;
+
+    /* Drop shadow follows the scroll image better than a box-shadow */
+    filter:
+        drop-shadow(0 0 18px rgba(139, 92, 246, 0.34))
+        drop-shadow(0 18px 32px rgba(0, 0, 0, 0.5));
+
+    animation: parchmentGlow 5s ease-in-out infinite;
 }
 
-.home-button:hover {
-    background: rgba(214, 168, 79, 0.12);
-    box-shadow: 0 0 14px rgba(214, 168, 79, 0.25);
+.scroll-card > * {
+    position: relative;
+    z-index: 2;
 }
 
-.selected-answer {
-    opacity: 0.85;
-    font-style: italic;
+/* Make sure no old card overlays appear on top of the scroll image */
+
+.scroll-card::before,
+.scroll-card::after {
+    content: none;
+}
+
+/* Page-specific scroll sizing */
+
+.home-card {
+    min-height: 720px;
+    padding: 225px 76px 150px;
+    animation:
+        scrollUnroll 0.85s ease-out both,
+        parchmentGlow 5s ease-in-out infinite 0.85s;
+}
+
+.setup-card {
+    min-height: 850px;
+    padding: 165px 78px 135px;
+}
+
+.quiz-card {
+    width: min(660px, 94vw);
+    max-width: 660px;
+    min-height: 850px;
+    padding: 165px 78px 135px;
+}
+
+.results-card {
+    min-height: 760px;
+    padding: 205px 78px 145px;
+}
+
+/* Text inside parchment cards */
+
+.scroll-card h1,
+.scroll-card h2,
+.scroll-card h3 {
+    color: #5a3215;
+    text-shadow:
+        0 1px 0 rgba(255, 235, 171, 0.9),
+        0 0 10px rgba(214, 168, 79, 0.28),
+        0 0 14px rgba(139, 92, 246, 0.18);
+}
+
+.scroll-card h1 {
+    font-size: 2.95rem;
+    margin: 0 0 16px;
+}
+
+.scroll-card h2 {
+    font-size: 2rem;
+    margin: 0 0 14px;
+}
+
+.scroll-card h3 {
+    font-size: 1.3rem;
+    color: #5a3215;
+    margin: 16px 0;
+}
+
+.scroll-card p {
+    color: var(--ink);
+    font-weight: 700;
+    margin-top: 0;
+}
+
+.scroll-card .feedback {
+    color: #5b220f;
+    text-shadow: 0 0 8px rgba(240, 210, 138, 0.45);
+}
+
+/* Forms on parchment */
+
+.scroll-card form {
+    gap: 12px;
+}
+
+.scroll-card label {
+    color: var(--ink);
+    text-shadow: 0 1px 0 rgba(255, 238, 188, 0.8);
+    font-weight: 700;
+}
+
+.scroll-card input,
+.scroll-card select {
+    width: 100%;
+    color: var(--ink);
+    font-weight: bold;
+    background:
+        linear-gradient(180deg, rgba(255, 234, 177, 0.82), rgba(218, 158, 78, 0.34));
+    border: 2px solid rgba(122, 73, 24, 0.78);
+    box-shadow:
+        inset 0 2px 8px rgba(83, 43, 12, 0.2),
+        0 0 10px rgba(139, 92, 246, 0.12);
+}
+
+.scroll-card input:focus,
+.scroll-card select:focus {
+    border-color: var(--purple);
+    box-shadow:
+        inset 0 2px 8px rgba(83, 43, 12, 0.16),
+        0 0 14px rgba(139, 92, 246, 0.35),
+        0 0 10px rgba(214, 168, 79, 0.28);
+}
+
+.scroll-card option {
+    background: #f1cc83;
+    color: var(--ink);
+}
+
+/* Buttons on parchment */
+
+.scroll-card button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(99, 54, 16, 0.78);
+    background:
+        linear-gradient(135deg, #8b5cf6, #5f35b8 55%, #3d226f);
+    color: #fff7dc;
+    text-shadow: 0 1px 1px rgba(31, 13, 51, 0.8);
+    box-shadow:
+        0 0 16px rgba(139, 92, 246, 0.35),
+        0 4px 0 rgba(64, 34, 12, 0.38),
+        inset 0 0 10px rgba(255, 255, 255, 0.12);
+}
+
+.scroll-card button:hover {
+    transform: translateY(-3px);
+    box-shadow:
+        0 0 22px rgba(214, 168, 79, 0.42),
+        0 0 24px rgba(139, 92, 246, 0.42),
+        0 5px 0 rgba(64, 34, 12, 0.34),
+        inset 0 0 12px rgba(255, 255, 255, 0.16);
+}
+
+.scroll-card .home-button {
+    background:
+        linear-gradient(180deg, rgba(255, 232, 173, 0.5), rgba(198, 125, 48, 0.24));
+    color: #5a3215;
+    text-shadow: 0 1px 0 rgba(255, 235, 171, 0.9);
+    border: 2px solid rgba(116, 70, 22, 0.8);
+    box-shadow:
+        inset 0 0 8px rgba(255, 241, 185, 0.25),
+        0 0 10px rgba(139, 92, 246, 0.14);
+}
+
+/* Quiz HUD and labels */
+
+.quiz-meta,
+.score-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 224, 149, 0.5);
+    border: 2px solid rgba(113, 67, 21, 0.72);
+    color: #4b2a12;
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow:
+        inset 0 0 8px rgba(255, 244, 201, 0.3),
+        0 0 10px rgba(139, 92, 246, 0.12);
+    margin: 0 3px 10px;
 }
 
 .progress-bar {
     width: 100%;
-    height: 12px;
-    background: #151a24;
+    height: 11px;
+    background: rgba(85, 46, 17, 0.42);
+    border: 1px solid rgba(100, 56, 18, 0.72);
     border-radius: 999px;
     overflow: hidden;
-    margin: 12px 0 24px;
+    margin: 8px 0 18px;
+    box-shadow: inset 0 2px 8px rgba(60, 31, 10, 0.28);
 }
 
 .progress-fill {
@@ -288,35 +384,88 @@ label {
     animation: magicalPulse 4s infinite;
 }
 
-.result-score {
-    color: var(--text-muted);
-    font-weight: bold;
-}
+/* Answer buttons */
 
-.result-percentage {
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 3rem;
-    font-weight: bold;
-    color: var(--gold-light);
-    margin: 12px 0;
-    text-shadow:
-        0 0 16px rgba(214, 168, 79, 0.45),
-        0 0 28px rgba(139, 92, 246, 0.3);
-}
-
-.result-message {
-    font-size: 1.1rem;
-    color: var(--text-light);
-    max-width: 520px;
-    margin: 0 auto 20px;
-}
-
-.timer-section {
+.answer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
     margin: 18px 0;
 }
 
+.answer-list > div {
+    width: 92%;
+    margin: 0 auto;
+}
+
+/* More specific than .scroll-card button, so answer choices do not inherit main purple button styling */
+.scroll-card .answer-button {
+    width: 100%;
+    color: #f8efd8;
+    text-align: left;
+    padding: 12px 15px;
+    border-radius: 14px;
+    border: 1px solid rgba(214, 168, 79, 0.7);
+    background:
+        linear-gradient(145deg, rgba(18, 11, 28, 0.96), rgba(38, 25, 52, 0.96));
+    box-shadow:
+        inset 0 0 10px rgba(255, 255, 255, 0.045),
+        0 0 10px rgba(139, 92, 246, 0.14),
+        0 2px 6px rgba(45, 22, 8, 0.34);
+    font-weight: 700;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
+}
+
+.scroll-card .answer-button:hover {
+    background:
+        linear-gradient(145deg, rgba(28, 17, 42, 0.98), rgba(54, 35, 72, 0.96));
+    border-color: var(--gold-light);
+    box-shadow:
+        0 0 16px rgba(139, 92, 246, 0.26),
+        0 0 12px rgba(214, 168, 79, 0.24),
+        0 2px 7px rgba(45, 22, 8, 0.36);
+}
+
+.scroll-card .answer-button:disabled {
+    opacity: 1;
+}
+
+/* Correct answer overrides both .scroll-card button and .scroll-card .answer-button */
+.scroll-card .answer-button.correct-answer {
+    border-color: var(--success);
+    background: rgba(79, 201, 133, 0.28);
+    color: #f3fff7;
+    box-shadow:
+        0 0 16px rgba(79, 201, 133, 0.55),
+        inset 0 0 12px rgba(79, 201, 133, 0.18);
+}
+
+/* Wrong answer overrides both .scroll-card button and .scroll-card .answer-button */
+.scroll-card .answer-button.wrong-answer {
+    border-color: var(--danger);
+    background: rgba(201, 79, 79, 0.3);
+    color: #fff1f1;
+    box-shadow:
+        0 0 16px rgba(201, 79, 79, 0.55),
+        inset 0 0 12px rgba(201, 79, 79, 0.18);
+}
+
+.selected-answer {
+    color: #5c2f13;
+    opacity: 0.95;
+    font-style: italic;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+/* Timer */
+
+.timer-section {
+    margin: 12px 0 10px;
+}
+
 .timer-label {
-    color: var(--gold-light);
+    color: #5a3215;
     font-weight: bold;
     margin-bottom: 8px;
 }
@@ -324,10 +473,11 @@ label {
 .timer-bar {
     width: 100%;
     height: 14px;
-    background: rgba(16, 9, 26, 0.9);
-    border: 1px solid var(--gold);
+    background: rgba(88, 48, 17, 0.42);
+    border: 1px solid rgba(111, 63, 20, 0.82);
     border-radius: 999px;
     overflow: hidden;
+    box-shadow: inset 0 2px 8px rgba(57, 28, 7, 0.32);
 }
 
 .timer-fill {
@@ -336,6 +486,33 @@ label {
     background: linear-gradient(90deg, var(--gold), var(--purple));
     box-shadow: 0 0 14px var(--purple-glow);
     transform-origin: left;
+}
+
+/* Results */
+
+.result-score {
+    color: var(--ink-muted);
+    font-weight: bold;
+}
+
+.result-percentage {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 3.1rem;
+    font-weight: bold;
+    color: #6b3a16;
+    margin: 10px 0;
+    text-shadow:
+        0 1px 0 rgba(255, 236, 178, 0.9),
+        0 0 18px rgba(214, 168, 79, 0.58),
+        0 0 28px rgba(139, 92, 246, 0.38);
+}
+
+.result-message {
+    font-size: 1.05rem;
+    color: var(--ink);
+    max-width: 520px;
+    margin: 0 auto 18px;
+    font-weight: 700;
 }
 
 /* Portal background */
@@ -348,8 +525,8 @@ label {
     pointer-events: none;
     background-image:
         linear-gradient(
-            rgba(16, 9, 26, 0.04),
-            rgba(16, 9, 26, 0.44)
+            rgba(16, 9, 26, 0.06),
+            rgba(16, 9, 26, 0.42)
         ),
         url("../assets/portal-background.webp");
     background-size: cover;
@@ -357,7 +534,6 @@ label {
     background-repeat: no-repeat;
 }
 
-/* Extra magical bloom over the real portal image */
 .portal-background::before {
     content: "";
     position: absolute;
@@ -365,17 +541,16 @@ label {
     background:
         radial-gradient(
             circle at center 24%,
-            rgba(240, 210, 138, 0.24) 0%,
-            rgba(139, 92, 246, 0.28) 20%,
-            rgba(139, 92, 246, 0.18) 36%,
+            rgba(240, 210, 138, 0.22) 0%,
+            rgba(139, 92, 246, 0.24) 20%,
+            rgba(139, 92, 246, 0.14) 36%,
             transparent 62%
         );
     filter: blur(30px);
-    opacity: 0.85;
+    opacity: 0.72;
     animation: portalBloom 7s ease-in-out infinite;
 }
 
-/* Wide side glow so the portal feels like it spills around the card */
 .portal-background::after {
     content: "";
     position: absolute;
@@ -383,21 +558,21 @@ label {
     background:
         radial-gradient(
             ellipse at 18% 38%,
-            rgba(139, 92, 246, 0.24),
+            rgba(139, 92, 246, 0.2),
             transparent 34%
         ),
         radial-gradient(
             ellipse at 82% 38%,
-            rgba(214, 168, 79, 0.16),
+            rgba(214, 168, 79, 0.13),
             transparent 34%
         ),
         radial-gradient(
             ellipse at center 16%,
-            rgba(139, 92, 246, 0.2),
+            rgba(139, 92, 246, 0.16),
             transparent 40%
         );
     filter: blur(18px);
-    opacity: 0.85;
+    opacity: 0.72;
     animation: portalSideGlow 9s ease-in-out infinite;
 }
 
@@ -419,13 +594,13 @@ label {
     background:
         radial-gradient(
             circle at center 26%,
-            rgba(248, 239, 216, 0.22) 0%,
-            rgba(240, 210, 138, 0.2) 14%,
-            rgba(139, 92, 246, 0.24) 30%,
-            rgba(139, 92, 246, 0.12) 46%,
+            rgba(248, 239, 216, 0.18) 0%,
+            rgba(240, 210, 138, 0.16) 14%,
+            rgba(139, 92, 246, 0.2) 30%,
+            rgba(139, 92, 246, 0.1) 46%,
             transparent 68%
         );
-    filter: blur(26px);
+    filter: blur(24px);
     mix-blend-mode: screen;
 }
 
@@ -435,11 +610,11 @@ label {
     background:
         radial-gradient(
             ellipse at center 34%,
-            rgba(139, 92, 246, 0.28),
-            rgba(214, 168, 79, 0.1) 28%,
+            rgba(139, 92, 246, 0.22),
+            rgba(214, 168, 79, 0.08) 28%,
             transparent 66%
         );
-    filter: blur(50px);
+    filter: blur(46px);
     mix-blend-mode: screen;
 }
 
@@ -502,36 +677,82 @@ label {
     }
 }
 
-@keyframes portalBloom {
+@keyframes parchmentGlow {
     0% {
-        transform: scale(1);
-        opacity: 0.65;
+        filter:
+            drop-shadow(0 0 14px rgba(139, 92, 246, 0.24))
+            drop-shadow(0 18px 32px rgba(0, 0, 0, 0.5));
     }
 
     50% {
-        transform: scale(1.06);
+        filter:
+            drop-shadow(0 0 20px rgba(214, 168, 79, 0.22))
+            drop-shadow(0 18px 32px rgba(0, 0, 0, 0.5));
+    }
+
+    100% {
+        filter:
+            drop-shadow(0 0 14px rgba(139, 92, 246, 0.24))
+            drop-shadow(0 18px 32px rgba(0, 0, 0, 0.5));
+    }
+}
+
+@keyframes scrollUnroll {
+    0% {
+        opacity: 0;
+        transform: scaleY(0.12) scaleX(0.88) translateY(-24px);
+        transform-origin: top center;
+        filter:
+            drop-shadow(0 0 24px rgba(139, 92, 246, 0.7))
+            drop-shadow(0 18px 32px rgba(0, 0, 0, 0.5));
+    }
+
+    65% {
         opacity: 1;
+        transform: scaleY(1.04) scaleX(1) translateY(0);
+        transform-origin: top center;
+    }
+
+    100% {
+        opacity: 1;
+        transform: scaleY(1) scaleX(1) translateY(0);
+        transform-origin: top center;
+        filter:
+            drop-shadow(0 0 14px rgba(139, 92, 246, 0.24))
+            drop-shadow(0 18px 32px rgba(0, 0, 0, 0.5));
+    }
+}
+
+@keyframes portalBloom {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.05);
+        opacity: 0.88;
     }
 
     100% {
         transform: scale(1);
-        opacity: 0.65;
+        opacity: 0.6;
     }
 }
 
 @keyframes portalSideGlow {
     0% {
-        opacity: 0.62;
+        opacity: 0.58;
         transform: scale(1);
     }
 
     50% {
-        opacity: 0.92;
-        transform: scale(1.04);
+        opacity: 0.8;
+        transform: scale(1.03);
     }
 
     100% {
-        opacity: 0.62;
+        opacity: 0.58;
         transform: scale(1);
     }
 }
@@ -548,11 +769,37 @@ label {
     }
 
     .portal-mist-overlay {
-        filter: blur(42px);
+        filter: blur(40px);
+    }
+
+    .card.scroll-card,
+    .quiz-card {
+        width: min(610px, 96vw);
+        max-width: 610px;
+        min-height: 800px;
+        padding: 160px 62px 125px;
+        background-size: 124% 112%;
+    }
+
+    .home-card {
+        min-height: 690px;
+        padding: 215px 64px 140px;
+    }
+
+    .setup-card {
+        min-height: 830px;
+    }
+
+    .results-card {
+        min-height: 740px;
     }
 }
 
 @media (max-width: 640px) {
+    .page {
+        padding: 10px 8px 26px;
+    }
+
     h1 {
         font-size: 2.3rem;
     }
@@ -565,15 +812,65 @@ label {
         padding: 28px 20px;
     }
 
+    .card.scroll-card,
+    .quiz-card {
+        width: 100%;
+        min-height: 760px;
+        padding: 138px 34px 112px;
+        background-size: 132% 114%;
+    }
+
+    .home-card {
+        min-height: 635px;
+        padding: 188px 36px 132px;
+    }
+
+    .setup-card {
+        min-height: 820px;
+    }
+
+    .results-card {
+        min-height: 700px;
+    }
+
+    .scroll-card h1 {
+        font-size: 2.1rem;
+    }
+
+    .scroll-card h2 {
+        font-size: 1.62rem;
+    }
+
+    .quiz-meta,
+    .score-badge {
+        font-size: 0.82rem;
+        padding: 6px 9px;
+        margin-bottom: 8px;
+    }
+
+    .scroll-card h3 {
+        font-size: 1.12rem;
+    }
+
+    .answer-list {
+        gap: 8px;
+        margin: 14px 0;
+    }
+
+    .answer-button {
+        padding: 12px 13px;
+        font-size: 0.92rem;
+    }
+
     .portal-background {
         background-position: center top;
     }
 
     .portal-background::before {
-        opacity: 0.60;
+        opacity: 0.66;
     }
 
     .portal-background::after {
-        opacity: 0.68;
+        opacity: 0.62;
     }
 }
