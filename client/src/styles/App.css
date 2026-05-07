@@ -25,9 +25,11 @@
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
+    overflow-x: hidden;
     background:
-        radial-gradient(circle at top, rgba(139, 92, 246, 0.35), transparent 35%),
-        radial-gradient(circle at bottom left, rgba(214, 168, 79, 0.18), transparent 30%),
+        radial-gradient(circle at 50% 0%, rgba(139, 92, 246, 0.32), transparent 28%),
+        radial-gradient(circle at 18% 85%, rgba(214, 168, 79, 0.14), transparent 26%),
+        radial-gradient(circle at 82% 78%, rgba(139, 92, 246, 0.12), transparent 24%),
         linear-gradient(135deg, var(--bg-dark), var(--bg-mid), #2b1d16);
     color: var(--text-light);
 }
@@ -100,22 +102,46 @@ form {
     justify-content: center;
     align-items: center;
     padding: 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.page::after {
+    content: "";
+    position: absolute;
+    width: min(760px, 88vw);
+    height: 150px;
+    bottom: 16%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: radial-gradient(
+        ellipse,
+        rgba(139, 92, 246, 0.34),
+        rgba(214, 168, 79, 0.14),
+        transparent 72%
+    );
+    filter: blur(22px);
+    z-index: -1;
+    pointer-events: none;
 }
 
 .card {
     width: 100%;
     max-width: 700px;
     background:
-        linear-gradient(145deg, rgba(37, 23, 47, 0.96), rgba(47, 33, 24, 0.96));
+        linear-gradient(145deg, rgba(37, 23, 47, 0.8), rgba(47, 33, 24, 0.82));
+    backdrop-filter: blur(7px);
+    -webkit-backdrop-filter: blur(7px);
     padding: 36px;
     border-radius: 20px;
     text-align: center;
     border: 2px solid var(--gold);
     box-shadow:
-    0 0 25px var(--purple-glow),
-    0 18px 45px rgba(0, 0, 0, 0.55),
-    inset 0 0 18px rgba(214, 168, 79, 0.08);
-animation: cardGlow 4s infinite;
+        0 0 40px rgba(139, 92, 246, 0.34),
+        0 0 24px rgba(214, 168, 79, 0.16),
+        0 20px 55px rgba(0, 0, 0, 0.62),
+        inset 0 0 22px rgba(214, 168, 79, 0.1);
+    animation: cardGlow 4s infinite;
 }
 
 .answer-list {
@@ -123,6 +149,10 @@ animation: cardGlow 4s infinite;
     flex-direction: column;
     gap: 10px;
     margin: 24px 0;
+}
+
+.answer-list > div {
+    width: 100%;
 }
 
 .answer-button {
@@ -133,6 +163,15 @@ animation: cardGlow 4s infinite;
     text-align: left;
     padding: 14px 18px;
     border-radius: 14px;
+}
+
+.answer-button:hover {
+    background: rgba(139, 92, 246, 0.25);
+    border-color: var(--gold-light);
+}
+
+.answer-button:disabled {
+    opacity: 0.9;
 }
 
 .correct-answer {
@@ -151,15 +190,6 @@ animation: cardGlow 4s infinite;
         inset 0 0 10px rgba(201, 79, 79, 0.12);
 }
 
-.answer-button:hover {
-    background: rgba(139, 92, 246, 0.25);
-    border-color: var(--gold-light);
-}
-
-.answer-button:disabled {
-    opacity: 0.9;
-}
-
 .feedback {
     font-size: 1.2rem;
     font-weight: bold;
@@ -170,7 +200,9 @@ h2,
 h3 {
     font-family: Georgia, "Times New Roman", serif;
     color: var(--gold-light);
-    text-shadow: 0 0 12px rgba(214, 168, 79, 0.25);
+    text-shadow:
+        0 0 10px rgba(214, 168, 79, 0.34),
+        0 0 22px rgba(139, 92, 246, 0.24);
 }
 
 h1 {
@@ -211,23 +243,6 @@ label {
     font-weight: bold;
 }
 
-.progress-bar {
-    width: 100%;
-    height: 12px;
-    background: #151a24;
-    border-radius: 999px;
-    overflow: hidden;
-    margin: 12px 0 24px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--purple), var(--gold));
-    box-shadow: 0 0 12px var(--purple-glow);
-    transition: width 0.4s ease;
-    animation: magicalPulse 4s infinite;
-}
-
 .score-badge {
     display: inline-block;
     background: rgba(16, 9, 26, 0.85);
@@ -256,43 +271,21 @@ label {
     font-style: italic;
 }
 
-@keyframes magicalPulse {
-    0% {
-        box-shadow: 0 0 8px var(--purple-glow);
-    }
-
-    50% {
-        box-shadow:
-            0 0 16px var(--purple-glow),
-            0 0 22px rgba(214, 168, 79, 0.35);
-    }
-
-    100% {
-        box-shadow: 0 0 8px var(--purple-glow);
-    }
+.progress-bar {
+    width: 100%;
+    height: 12px;
+    background: #151a24;
+    border-radius: 999px;
+    overflow: hidden;
+    margin: 12px 0 24px;
 }
 
-@keyframes cardGlow {
-    0% {
-        box-shadow:
-            0 0 20px rgba(139, 92, 246, 0.35),
-            0 18px 45px rgba(0, 0, 0, 0.55),
-            inset 0 0 18px rgba(214, 168, 79, 0.08);
-    }
-
-    50% {
-        box-shadow:
-            0 0 32px rgba(214, 168, 79, 0.28),
-            0 18px 45px rgba(0, 0, 0, 0.55),
-            inset 0 0 22px rgba(214, 168, 79, 0.12);
-    }
-
-    100% {
-        box-shadow:
-            0 0 20px rgba(139, 92, 246, 0.35),
-            0 18px 45px rgba(0, 0, 0, 0.55),
-            inset 0 0 18px rgba(214, 168, 79, 0.08);
-    }
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--purple), var(--gold));
+    box-shadow: 0 0 12px var(--purple-glow);
+    transition: width 0.4s ease;
+    animation: magicalPulse 4s infinite;
 }
 
 .result-score {
@@ -306,7 +299,9 @@ label {
     font-weight: bold;
     color: var(--gold-light);
     margin: 12px 0;
-    text-shadow: 0 0 16px rgba(214, 168, 79, 0.35);
+    text-shadow:
+        0 0 16px rgba(214, 168, 79, 0.45),
+        0 0 28px rgba(139, 92, 246, 0.3);
 }
 
 .result-message {
@@ -343,6 +338,242 @@ label {
     transform-origin: left;
 }
 
-.answer-list > div {
-    width: 100%;
+/* Portal background */
+
+.portal-background {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    background-image:
+        linear-gradient(
+            rgba(16, 9, 26, 0.04),
+            rgba(16, 9, 26, 0.44)
+        ),
+        url("../assets/portal-background.webp");
+    background-size: cover;
+    background-position: center top;
+    background-repeat: no-repeat;
+}
+
+/* Extra magical bloom over the real portal image */
+.portal-background::before {
+    content: "";
+    position: absolute;
+    inset: -10%;
+    background:
+        radial-gradient(
+            circle at center 24%,
+            rgba(240, 210, 138, 0.24) 0%,
+            rgba(139, 92, 246, 0.28) 20%,
+            rgba(139, 92, 246, 0.18) 36%,
+            transparent 62%
+        );
+    filter: blur(30px);
+    opacity: 0.85;
+    animation: portalBloom 7s ease-in-out infinite;
+}
+
+/* Wide side glow so the portal feels like it spills around the card */
+.portal-background::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            ellipse at 18% 38%,
+            rgba(139, 92, 246, 0.24),
+            transparent 34%
+        ),
+        radial-gradient(
+            ellipse at 82% 38%,
+            rgba(214, 168, 79, 0.16),
+            transparent 34%
+        ),
+        radial-gradient(
+            ellipse at center 16%,
+            rgba(139, 92, 246, 0.2),
+            transparent 40%
+        );
+    filter: blur(18px);
+    opacity: 0.85;
+    animation: portalSideGlow 9s ease-in-out infinite;
+}
+
+.portal-vignette {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at center 28%,
+            rgba(0, 0, 0, 0) 10%,
+            rgba(0, 0, 0, 0.05) 42%,
+            rgba(0, 0, 0, 0.56) 100%
+        );
+}
+
+.portal-glow-overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(
+            circle at center 26%,
+            rgba(248, 239, 216, 0.22) 0%,
+            rgba(240, 210, 138, 0.2) 14%,
+            rgba(139, 92, 246, 0.24) 30%,
+            rgba(139, 92, 246, 0.12) 46%,
+            transparent 68%
+        );
+    filter: blur(26px);
+    mix-blend-mode: screen;
+}
+
+.portal-mist-overlay {
+    position: absolute;
+    inset: -8%;
+    background:
+        radial-gradient(
+            ellipse at center 34%,
+            rgba(139, 92, 246, 0.28),
+            rgba(214, 168, 79, 0.1) 28%,
+            transparent 66%
+        );
+    filter: blur(50px);
+    mix-blend-mode: screen;
+}
+
+.portal-particle-layer {
+    position: absolute;
+    inset: 0;
+}
+
+.portal-particle {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--gold-light);
+    box-shadow:
+        0 0 12px rgba(240, 210, 138, 1),
+        0 0 24px rgba(139, 92, 246, 0.75),
+        0 0 36px rgba(214, 168, 79, 0.38);
+}
+
+/* Animations */
+
+@keyframes magicalPulse {
+    0% {
+        box-shadow: 0 0 8px var(--purple-glow);
+    }
+
+    50% {
+        box-shadow:
+            0 0 16px var(--purple-glow),
+            0 0 22px rgba(214, 168, 79, 0.35);
+    }
+
+    100% {
+        box-shadow: 0 0 8px var(--purple-glow);
+    }
+}
+
+@keyframes cardGlow {
+    0% {
+        box-shadow:
+            0 0 24px rgba(139, 92, 246, 0.38),
+            0 0 14px rgba(214, 168, 79, 0.12),
+            0 18px 45px rgba(0, 0, 0, 0.58),
+            inset 0 0 18px rgba(214, 168, 79, 0.08);
+    }
+
+    50% {
+        box-shadow:
+            0 0 42px rgba(214, 168, 79, 0.32),
+            0 0 32px rgba(139, 92, 246, 0.3),
+            0 18px 45px rgba(0, 0, 0, 0.58),
+            inset 0 0 24px rgba(214, 168, 79, 0.14);
+    }
+
+    100% {
+        box-shadow:
+            0 0 24px rgba(139, 92, 246, 0.38),
+            0 0 14px rgba(214, 168, 79, 0.12),
+            0 18px 45px rgba(0, 0, 0, 0.58),
+            inset 0 0 18px rgba(214, 168, 79, 0.08);
+    }
+}
+
+@keyframes portalBloom {
+    0% {
+        transform: scale(1);
+        opacity: 0.65;
+    }
+
+    50% {
+        transform: scale(1.06);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 0.65;
+    }
+}
+
+@keyframes portalSideGlow {
+    0% {
+        opacity: 0.62;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.92;
+        transform: scale(1.04);
+    }
+
+    100% {
+        opacity: 0.62;
+        transform: scale(1);
+    }
+}
+
+/* Responsive layout */
+
+@media (max-width: 900px) {
+    .portal-background {
+        background-position: center top;
+    }
+
+    .portal-glow-overlay {
+        filter: blur(22px);
+    }
+
+    .portal-mist-overlay {
+        filter: blur(42px);
+    }
+}
+
+@media (max-width: 640px) {
+    h1 {
+        font-size: 2.3rem;
+    }
+
+    h2 {
+        font-size: 1.9rem;
+    }
+
+    .card {
+        padding: 28px 20px;
+    }
+
+    .portal-background {
+        background-position: center top;
+    }
+
+    .portal-background::before {
+        opacity: 0.60;
+    }
+
+    .portal-background::after {
+        opacity: 0.68;
+    }
 }
